@@ -27,10 +27,17 @@ export default Vue.extend({
 	},
 	methods: {
 		react(reaction: string) {
-			this.$root.api('notes/reactions/create', {
-				noteId: this.note.id,
-				reaction: reaction
-			});
+			if (this.note.myReaction) {
+				this.$root.api('notes/reactions/delete', {
+					noteId: this.note.id,
+					reaction: reaction
+				});
+			} else {
+				this.$root.api('notes/reactions/create', {
+					noteId: this.note.id,
+					reaction: reaction
+				});
+			}
 		}
 	}
 });
@@ -49,6 +56,7 @@ export default Vue.extend({
 		margin-right 6px
 		padding 0 6px
 		border-radius 4px
+		cursor pointer
 
 		*
 			user-select none
@@ -61,7 +69,6 @@ export default Vue.extend({
 				color var(--primaryForeground)
 
 		&:not(.reacted)
-			cursor pointer
 			background var(--reactionViewerButtonBg)
 
 			&:hover
